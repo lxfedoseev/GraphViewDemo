@@ -30,8 +30,8 @@ import com.jjoe64.graphview.compatible.ScaleGestureDetector;
  */
 abstract public class GraphView extends LinearLayout {
 	static final private class GraphViewConfig {
-		static final float BORDER = 20;
-		static final float VERTICAL_LABEL_WIDTH = 100;
+		static final float BORDER = 20; 
+		static final float VERTICAL_LABEL_WIDTH = 100; 
 		static final float HORIZONTAL_LABEL_HEIGHT = 80;
 	}
 
@@ -58,7 +58,10 @@ abstract public class GraphView extends LinearLayout {
 			// normal
 			paint.setStrokeWidth(0);
 
-			float border = GraphViewConfig.BORDER;
+			//alexfed begin
+			//float border = GraphViewConfig.BORDER;
+			float border = graphViewStyle.getLabelBorder();
+			//alexfed end
 			float horstart = 0;
 			float height = getHeight();
 			float width = getWidth() - 1;
@@ -155,7 +158,10 @@ abstract public class GraphView extends LinearLayout {
 			// first scale
 			if (scalable && scaleDetector != null) {
 				scaleDetector.onTouchEvent(event);
-				handled = scaleDetector.isInProgress();
+				//alexfed begin: smooth scaling bug fix
+				//handled = scaleDetector.isInProgress();
+				handled = false;
+				//alexfed end
 			}
 			if (!handled) {
 				// if not scaled, scroll
@@ -214,7 +220,10 @@ abstract public class GraphView extends LinearLayout {
 			// normal
 			paint.setStrokeWidth(0);
 
-			float border = GraphViewConfig.BORDER;
+			//alexfed begin
+			//float border = GraphViewConfig.BORDER;
+			float border = graphViewStyle.getLabelBorder();
+			//alexfed end
 			float height = getHeight();
 			float graphheight = height - (2 * border);
 
@@ -224,6 +233,7 @@ abstract public class GraphView extends LinearLayout {
 
 			// vertical labels
 			paint.setTextAlign(Align.LEFT);
+			paint.setTextSize(graphViewStyle.getLabelFontSize()); //alexfed
 			int vers = verlabels.length - 1;
 			for (int i = 0; i < verlabels.length; i++) {
 				float y = ((graphheight / vers) * i) + border;
@@ -333,7 +343,10 @@ abstract public class GraphView extends LinearLayout {
 			lTop = height/2 - legendHeight/2;
 			break;
 		default:
-			lTop = height - GraphViewConfig.BORDER - legendHeight -10;
+			//alexfed begin
+			//lTop = height - GraphViewConfig.BORDER - legendHeight -10;
+			lTop = height - graphViewStyle.getLabelBorder() - legendHeight -10;
+			//alexfed end
 		}
 		float lRight = lLeft+legendWidth;
 		float lBottom = lTop+legendHeight;
@@ -381,7 +394,10 @@ abstract public class GraphView extends LinearLayout {
 	}
 
 	private String[] generateHorlabels(float graphwidth) {
-		int numLabels = (int) (graphwidth/GraphViewConfig.VERTICAL_LABEL_WIDTH);
+		//alexfed begin
+		//int numLabels = (int) (graphwidth/GraphViewConfig.VERTICAL_LABEL_WIDTH);
+		int numLabels = (int) (graphwidth/graphViewStyle.getVerticalLabelWidth());
+		//alexfed end
 		String[] labels = new String[numLabels+1];
 		double min = getMinX(false);
 		double max = getMaxX(false);
