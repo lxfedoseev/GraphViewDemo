@@ -683,4 +683,10 @@ abstract public class GraphView extends LinearLayout {
 		viewportStart = start;
 		viewportSize = size;
 	}
+	
+	public double[] getViewPort() {
+		double vp[] = {viewportStart, viewportSize};
+		return vp;
+	}
+	
 }
